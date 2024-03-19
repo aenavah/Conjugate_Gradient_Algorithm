@@ -29,7 +29,7 @@ def GaussJacobi(A, b, D, tol = 10**(-5), N = 10000):
       return x, k, 1, df
     errors.append([k, error])
     x0 = np.copy(x)
-  return x, k, 0, 0
+  return x, "didnt converge", 0, 0
 
 def GaussSeidel(A, b, D, tol = 10**(-5), N = 10000):
   errors = []
@@ -53,12 +53,16 @@ def GaussSeidel(A, b, D, tol = 10**(-5), N = 10000):
     if error < tol:
       df = pd.DataFrame(errors)
       df.to_csv("Errors_GaussSeidel_D=" + str(D) + ".csv")
-      return x, k, 1, df
+      return x, k+1, 1, df
     errors.append([k, error])
     x0 = np.copy(x)
-  return x, k, 0, 0
+  return x, "didnt converge", 0, 0
 
-def ConjugateGradient(A, b, tol = 10**(-2), x0 = "", maxiter = 1000):
+def ConjugateGradient(A, b, tol = 10**(-5), x0 = "", maxiter = 1000):
+  if np.array_equal(A, A.T):
+    symm = 1
+  else:
+    symm = 0
   A = A.copy()
   b = b.copy()
   n, m = np.shape(A)
@@ -74,13 +78,20 @@ def ConjugateGradient(A, b, tol = 10**(-2), x0 = "", maxiter = 1000):
     y = A @ p
     alpha = E/(np.transpose(p) @ y)
     x = x + (alpha * p)
-    r = r - (alpha * p)
+    r = r - (alpha * y)
     E_new = (norm(r))**2
     beta = E_new/E
     p = r + beta * p
     E = E_new
   works = 1 
-  return x, count, works
+  return x, count, works, symm
+
+def get_M_inv(A):
+  M_inv = np.zeros((A.shape))
+  diag = np.diagonal(A)
+  a_invs = 1/diag
+  np.fill_diagonal(M_inv, a_invs)
+  return M_inv
 
 
 #https://www.youtube.com/watch?v=z9glsQDkkWU&t=782s
