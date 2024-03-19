@@ -5,6 +5,9 @@ import ConjugateGradient_functions
 GaussJacobi = ConjugateGradient_functions.GaussJacobi
 GaussSeidel = ConjugateGradient_functions.GaussSeidel
 ConjugateGradient = ConjugateGradient_functions.ConjugateGradient
+ConjugateGradientpc = ConjugateGradient_functions.ConjugateGradientpc
+norm = ConjugateGradient_functions.norm
+
 if __name__ == "__main__":
 
   m = int(input("Input m for matrix size mxm: "))
@@ -19,6 +22,7 @@ if __name__ == "__main__":
   b = b.copy()
   which = int(input("To solve Ax = b enter (0) Gauss-Jacobi or (1) Gauss-Seidel or (2) for Conjugate-Gradient: "))
 
+  '''Computes all algorithm to produce plot for given D'''
   sol0, iterations0, works0, errors_df0 = GaussJacobi(A, b, D)
   sol1, iterations1, works1, errors_df1 = GaussSeidel(A, b, D)
   sol2, iterations2, works2, symm = ConjugateGradient(A, b)
@@ -28,7 +32,7 @@ if __name__ == "__main__":
   print("For Gauss-Seidel: " + str(iterations1))
   print("For Conjugate Gradient: " + str(iterations2))
 
-
+  '''Prints user choice of algorithm'''
   if which == 0:
     print("Using Gauss-Jacobi Method...")
     if works0 == 1:
@@ -36,7 +40,6 @@ if __name__ == "__main__":
       print(sol0)
     else:
       print("Booooo!")
-
   if which == 1:
     print("Using Gauss-Seidel Method...")
     if works1 == 1:
@@ -44,7 +47,6 @@ if __name__ == "__main__":
       print(sol1)
     else:
       print("Booooo!")
-
   if which == 2:
     print("Using Conjugate-Gradient Method...")
     if works2 == 1:
@@ -53,6 +55,7 @@ if __name__ == "__main__":
     else:
       print("Booooo!")
 
+  '''if either iteratios work for a given D, plot either or both'''
   if works0 == 1 or works1 == 1:
       ax = None
       if works0 == 1:
@@ -64,6 +67,7 @@ if __name__ == "__main__":
       ax.set_title("Error vs Iteration Number for D = " + str(D))
       plt.savefig("errors_D=" + str(D) + ".jpg")
 
+  #final bullet in b1
   # A20 = np.ones((10, 10))
   # D20 = [1,2,3,4,5,6,7,8,9,10]
   # b20 = D20.copy()
@@ -79,5 +83,19 @@ if __name__ == "__main__":
   # print(sol20)
   # print(sol21)
       
-  #Last bullet b2
+  #Last bullet b2  
+  # A10 = np.ones((10, 10))
+  # D10 = list(range(1,11))
+  # b10 = np.copy(D10)
+  # np.fill_diagonal(A10, D10)
+  # sol10, count10, works10, symm10 = ConjugateGradientpc(A10, b10)
+  # print("Count for 10x10: " + str(count10))
+
+  # A100 = np.ones((100, 100))
+  # D100 = list(range(1,101))
+  # b100 = np.copy(D100)
+  # np.fill_diagonal(A100, D100)
+  # sol100, count100, works100, symm100 = ConjugateGradientpc(A100, b100)
+  # print("Count for 100x100: " + str(count100))
+  
   

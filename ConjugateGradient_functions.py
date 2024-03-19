@@ -59,6 +59,9 @@ def GaussSeidel(A, b, D, tol = 10**(-5), N = 10000):
   return x, "didnt converge", 0, 0
 
 def ConjugateGradient(A, b, tol = 10**(-5), x0 = "", maxiter = 1000):
+  '''
+  Without conditioning, only requires inputs A and b
+  '''
   if np.array_equal(A, A.T):
     symm = 1
   else:
@@ -86,11 +89,51 @@ def ConjugateGradient(A, b, tol = 10**(-5), x0 = "", maxiter = 1000):
   works = 1 
   return x, count, works, symm
 
+def ConjugateGradientpc(A, b, tol = 10**(-5), x0 = "", maxiter = 1000):
+  '''
+  With conditioning, only requires inputs A and b
+  '''
+  if np.array_equal(A, A.T):
+    symm = 1
+  else:
+    symm = 0
+  A = A.copy()
+  b = b.copy()
+  n, m = np.shape(A)
+  if x0 == "":
+    x0 = np.zeros(m)
+  M_inv = get_M_inv(A)
+  M_inv.copy()
+  #-----
+  x = x0
+  r = b - A@x
+  z = M_inv @ r
+  p = z
+  E = r.T @ z
+  count = 0
+  while np.sqrt(E) > tol:
+    count += 1
+    y = A @ p
+    alpha = E/(p.T @ y)
+    x = x + (alpha * p)
+    r = r - (alpha * y)
+    z = M_inv @ r
+    E_new = r.T @ z
+    beta = E_new/E
+    p = z + beta * p
+    E = E_new
+  works = 1 
+  return x, count, works, symm
+
 def get_M_inv(A):
-  M_inv = np.zeros((A.shape))
+  m, n = np.shape(A)
+  M_inv = np.zeros((m, m))
   diag = np.diagonal(A)
-  a_invs = 1/diag
-  np.fill_diagonal(M_inv, a_invs)
+  diag_inv = []
+  for a in diag:
+    diag_inv.append(1/a)
+  np.array(diag_inv)
+  np.fill_diagonal(M_inv, diag_inv)
   return M_inv
 
 
