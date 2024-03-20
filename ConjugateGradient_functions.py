@@ -9,6 +9,7 @@ def norm(matrix):
 def GaussJacobi(A, b, D, tol = 10**(-5), N = 10000):
   '''Takes in required inputs A and b, and optional inputs N and tol'''
   '''solves Ax=b with initial guess x0, and max number of iterations N'''
+  '''Output: solution, iterations to converge, whether it was successful, and [iteration,errors] in a dataframe if successful'''
   errors = []
   n = len(b)
   x0 = np.zeros(n)
@@ -32,6 +33,9 @@ def GaussJacobi(A, b, D, tol = 10**(-5), N = 10000):
   return x, "didnt converge", 0, 0
 
 def GaussSeidel(A, b, D, tol = 10**(-5), N = 10000):
+  '''Takes in required inputs A and b, and optional inputs N and tol'''
+  '''solves Ax=b with initial guess x0, and max number of iterations N'''
+  '''Output: solution, iterations to converge, whether it was successful, and [iteration,errors] in a dataframe if successful'''
   errors = []
   n = len(b)
   x0 = np.zeros(n)
@@ -60,7 +64,9 @@ def GaussSeidel(A, b, D, tol = 10**(-5), N = 10000):
 
 def ConjugateGradient(A, b, tol = 10**(-5), x0 = "", maxiter = 1000):
   '''
-  Without conditioning, only requires inputs A and b
+  Without conditioning, With conditioning, only requires inputs A and b, 
+    optional tolerance, choice of x_0 and max iterations
+  Output: solution, iterations to converge, whether it was successful, and whether it's symmetric
   '''
   if np.array_equal(A, A.T):
     symm = 1
@@ -91,7 +97,9 @@ def ConjugateGradient(A, b, tol = 10**(-5), x0 = "", maxiter = 1000):
 
 def ConjugateGradientpc(A, b, tol = 10**(-5), x0 = "", maxiter = 1000):
   '''
-  With conditioning, only requires inputs A and b
+  With conditioning, only requires inputs A and b, 
+    optional tolerance, choice of x_0 and max iterations
+  Output: solution, iterations to converge, whether it was successful, and whether it's symmetric
   '''
   if np.array_equal(A, A.T):
     symm = 1
@@ -126,6 +134,10 @@ def ConjugateGradientpc(A, b, tol = 10**(-5), x0 = "", maxiter = 1000):
   return x, count, works, symm
 
 def get_M_inv(A):
+  '''
+  Compute M^{-1} for use with preconditioning
+  input: A to find corresponding M^{-1}, and returns M^{-1}
+  '''
   m, n = np.shape(A)
   M_inv = np.zeros((m, m))
   diag = np.diagonal(A)

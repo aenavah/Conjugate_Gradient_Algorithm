@@ -1,3 +1,7 @@
+# SVD
+
+Automated, data files and images are saved to local folder
+
 # Gauss-Jacobi, Gauss-Seidel, and Conjugate Gradient Algorithms
 
 The user is prompted to enter
@@ -13,6 +17,11 @@ for each user input, the converging algorithms will produce a csv in the local d
 
 In addition, the converging algorithm will be plotted and saved to the local direcorty with the naming convention:
 "errors_D=" + D + ".jpg"
+
+## Code Description
+
+Question parts are labeled in the comments on the driver file
+Inputs and Outputs are labeled in the corresponding function file
 
 Note: by default, the Conjugate Gradient Algorithm is without preconditioning, there is another function "ConjugateGradientpc" used to compute the Conjugate Gradient algorithm with preconditioning.
 
